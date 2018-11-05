@@ -6,6 +6,9 @@ OCoCNANS, for Outer Crust of Cold Non-Accreting Neutron Star is a Python code fo
 
 * Python 2.7
 
+* [SciPy](https://www.scipy.org/scipylib/index.html)
+
+
 ## Usage
 
     python2.7 ococnans.py ame2012.data output.out
