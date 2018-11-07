@@ -11,6 +11,7 @@ ALPHAFS = 7.2973525664e-3
 MEL = 0.5109989461
 RMN = 939.5654133
 RMP = 938.2720813
+AMU = 931.4940954
 
 def electron_energy_density(ne_):
     xr = HBARC*(3.*PI2*ne_)**(1./3.)/MEL
@@ -39,16 +40,22 @@ def lattice_pressure(zz_, ne_):
 def f_pressure(zz_, ne_, pp_):
     return electron_pressure(ne_) + lattice_pressure(zz_, ne_) - pp_
 
-def get_electron_density(pp_, zz_):
+def get_electron_density(zz_, pp_):
     ne = float(fsolve(lambda ne: f_pressure(zz_, ne, pp_), 1.e-10))
     return ne
 
-def gibbs_free_energy_per_nucleon(aa_, zz_, ne_, b_, pp_):
+def electron_binding_energy(zz_):
+    return 1.44381e-5*pow(zz_,2.39) + 1.55468e-12*pow(zz_,5.35)
+
+def nuclear_mass(aa_, zz_, deps_):
+    return deps_ + aa_*AMU - zz_*MEL + electron_binding_energy(zz_)
+
+def gibbs_free_energy_per_nucleon(aa_, zz_, ne_, deps_):
     vws = zz_/ne_
     nb = aa_/vws
-    return b_ + 4./3.*lattice_energy_density(zz_, ne_)*vws/aa_ \
-            + zz_/aa_*electron_chemical_potential(ne_) \
-            + zz_/aa_*(RMP-RMN) + RMN
+    e = nuclear_mass(aa_, zz_, deps_)
+    return e/aa_ + 4./3.*lattice_energy_density(zz_, ne_)*vws/aa_ \
+            + zz_/aa_*electron_chemical_potential(ne_)
 
 def get_outer_crust_composition(pp_, mass_table):
     gmin = 1.e99
@@ -56,10 +63,11 @@ def get_outer_crust_composition(pp_, mass_table):
     for line in f_data:
         columns = line.strip().split()
         zz = float(columns[0])
-        aa = float(columns[1])
-        b = float(columns[2])
-        ne = get_electron_density(pp_, zz)
-        g = gibbs_free_energy_per_nucleon(aa, zz, ne, b, pp_)
+        nn = float(columns[1])
+        deps = float(columns[2]) # mass excess
+        ne = get_electron_density(zz, pp_)
+        aa = zz + nn
+        g = gibbs_free_energy_per_nucleon(aa, zz, ne, deps)
         if g < gmin:
             aa_eq = aa
             zz_eq = zz
@@ -67,7 +75,6 @@ def get_outer_crust_composition(pp_, mass_table):
     f_data.close()
     return aa/zz*ne, gmin, aa_eq, zz_eq
     
-
 def main():
     mass_table = sys.argv[1]
     outfile = sys.argv[2]
@@ -81,15 +88,17 @@ def main():
     print "---------------------------------------------------"
     pp = 6.e-13
     nb = 0.
-    aa_sav = 0
-    zz_sav = 0
+    aa_sav = 1
+    zz_sav = 1
     nlayer = 0
     pmin = 0
     nbmin = 0
     f_ocrust = open(outfile, 'w')
-    while(nb < 1.e-5):
+    while(nb < 2.e-4):
         comp = get_outer_crust_composition(pp, mass_table)
         nb = comp[0]
+        if ("ame" in mass_table and nb > 4.e-5):
+            break
         g = comp[1]
         aa = int(comp[2])
         zz = int(comp[3])
@@ -100,10 +109,10 @@ def main():
             print str(nlayer) + " \t " + '{:0.3e}'.format(nbmin) \
                     + " \t " + '{:0.3e}'.format(pmin) + " \t " \
                     + str(aa) + " \t " + str(zz)
-            nbmin = nb
-            pmin = pp
         aa_sav = aa
         zz_sav = zz
+        nbmin = nb
+        pmin = pp
         pp += pp/2.
     f_ocrust.close()
     print ""
