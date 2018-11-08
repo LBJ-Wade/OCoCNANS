@@ -65,13 +65,14 @@ def get_outer_crust_composition(pp_, mass_table):
         zz = float(columns[0])
         nn = float(columns[1])
         deps = float(columns[2]) # mass excess
-        ne = get_electron_density(zz, pp_)
-        aa = zz + nn
-        g = gibbs_free_energy_per_nucleon(aa, zz, ne, deps)
-        if g < gmin:
-            aa_eq = aa
-            zz_eq = zz
-            gmin = g
+        if (nn > zz and nn % 2 == 0 and zz % 2 == 0):
+            ne = get_electron_density(zz, pp_)
+            aa = zz + nn
+            g = gibbs_free_energy_per_nucleon(aa, zz, ne, deps)
+            if g < gmin:
+                aa_eq = aa
+                zz_eq = zz
+                gmin = g
     f_data.close()
     return aa/zz*ne, gmin, aa_eq, zz_eq
     
@@ -84,20 +85,21 @@ def main():
     print "Mass table: " + mass_table
     print "Output file: " + outfile + " (format is nB, P, g, A, Z)"
     print ""
-    print "Layer \t n_B(min) \t P(min) \t A \t Z"
+    print "Layer \t n_B(max) \t P(max) \t A \t Z"
     print "---------------------------------------------------"
+    comp = get_outer_crust_composition(5.9e-13, mass_table)
+    aa_sav = int(comp[2])
+    zz_sav = int(comp[3])
     pp = 6.e-13
     nb = 0.
-    aa_sav = 1
-    zz_sav = 1
     nlayer = 0
-    pmin = 0
-    nbmin = 0
     f_ocrust = open(outfile, 'w')
-    while(nb < 2.e-4):
+    while (nb < 2.5e-4):
         comp = get_outer_crust_composition(pp, mass_table)
         nb = comp[0]
-        if ("ame" in mass_table and nb > 4.e-5):
+        pmax = pp
+        nbmax = nb
+        if ("ame" in mass_table and nb > 6.e-5):
             break
         g = comp[1]
         aa = int(comp[2])
@@ -106,15 +108,20 @@ def main():
                 + str(g) + "\t" + str(aa) + "\t" + str(zz) + "\n")
         if (aa != aa_sav or zz != zz_sav):
             nlayer += 1
-            print str(nlayer) + " \t " + '{:0.3e}'.format(nbmin) \
-                    + " \t " + '{:0.3e}'.format(pmin) + " \t " \
-                    + str(aa) + " \t " + str(zz)
+            print str(nlayer) + " \t " + '{:0.3e}'.format(nbmax) \
+                    + " \t " + '{:0.3e}'.format(pmax) + " \t " \
+                    + str(aa_sav) + " \t " + str(zz_sav)
+            aa_last_layer = aa_sav
+            zz_last_layer = zz_sav
         aa_sav = aa
         zz_sav = zz
-        nbmin = nb
-        pmin = pp
-        pp += pp/2.
+        pp += pp/4.
     f_ocrust.close()
+    if(aa_sav != aa_last_layer or zz_sav != zz_last_layer):
+        nlayer += 1
+        print str(nlayer) + " \t " + "---------" \
+                + " \t " + "---------" + " \t " \
+                + str(aa_sav) + " \t " + str(zz_sav)
     print ""
 
 if __name__=="__main__":
