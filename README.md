@@ -1,6 +1,6 @@
 # OCoCNANS
 
-OCoCNANS, for Outer Crust of Cold Non-Accreting Neutron Stars, is a Python code for calculating the outer crust composition and energetics of a cold non-accreting neutron star for given nuclear mass table.
+OCoCNANS, for Outer Crust of Cold Non-Accreting Neutron Stars, is a Python code for calculating the outer crust composition and energetics of a cold non-accreting neutron star for a given nuclear mass table.
 
 ## Requirements 
 
