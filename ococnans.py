@@ -94,7 +94,7 @@ def main():
     nb = 0.
     nlayer = 0
     f_ocrust = open(outfile, 'w')
-    while (nb < 2.5e-4):
+    while (nb < 3.e-4):
         comp = get_outer_crust_composition(pp, mass_table)
         nb = comp[0]
         pmax = pp
