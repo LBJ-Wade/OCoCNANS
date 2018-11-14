@@ -4,21 +4,27 @@ import sys
 from math import pi,log,pow
 from scipy.optimize import fsolve
 
-PI2 = 2.*pi
+# Mathematical constants
+# ======================
+PI2 = 2.*pi # pi squared
 
-HBARC = 197.3269788
-ALPHAFS = 7.2973525664e-3
-MEL = 0.5109989461
-RMN = 939.5654133
-RMP = 938.2720813
-AMU = 931.4940954
+# Physical constants (https://physics.nist.gov/cuu/Constants/index.html)
+# ==================
+HBARC = 197.3269788 # in MeV.fm
+ALPHAFS = 7.2973525664e-3 # fine-structure constant
+MEL = 0.5109989461 # electron mass energy equivalent in MeV
+RMN = 939.5654133 # neutron mass energy equivalent in MeV
+RMP = 938.2720813 # proton mass energy equivalent in MeV
+AMU = 931.4940954 # atomic mass constant energy equivalent in MeV
 
+# Electron energy density with rest mass (free Fermi gas expression)
 def electron_energy_density(ne_):
     xr = HBARC*(3.*PI2*ne_)**(1./3.)/MEL
     gammar = pow(xr*xr+1.,1./2.)
     return pow(MEL,4.)/8./PI2/pow(HBARC,3.)\
             *((2.*xr*xr+1.)*xr*gammar - log(xr + gammar)) 
 
+# Electron chemical potential with rest mass
 def electron_chemical_potential(ne_):
     xr = HBARC*(3.*PI2*ne_)**(1./3.)/MEL
     gammar = pow(xr*xr+1.,1./2.)
@@ -26,37 +32,46 @@ def electron_chemical_potential(ne_):
             /pow(HBARC,2.)*(gammar*(1.+6.*xr*xr) \
             + xr*xr*(2.*xr*xr+1.)/gammar - 1./gammar)
 
+# Electron pressure
 def electron_pressure(ne_):
     return ne_*electron_chemical_potential(ne_) \
             - electron_energy_density(ne_)
 
+# Lattice energy density for a bcc structure
 def lattice_energy_density(zz_, ne_):
     return -0.895929255682*pow(4.*pi/3.,1./3.)\
             *pow(zz_,2./3.)*pow(ne_,4./3.)
 
+# Lattice pressure
 def lattice_pressure(zz_, ne_):
     return lattice_energy_density(zz_, ne_)/3.
 
+# Pressure = electron contribution + lattice contribution
 def f_pressure(zz_, ne_, pp_):
     return electron_pressure(ne_) + lattice_pressure(zz_, ne_) - pp_
 
+# Electron density ne for a number of protons zz and pressure pp
 def get_electron_density(zz_, pp_):
     ne = float(fsolve(lambda ne: f_pressure(zz_, ne, pp_), 1.e-10))
     return ne
 
+# Electron binding energy as a function of the number of protons zz
 def electron_binding_energy(zz_):
     return 1.44381e-5*pow(zz_,2.39) + 1.55468e-12*pow(zz_,5.35)
 
+# Nuclear mass from the mass excess deps for a given nucleus (aa,zz)
 def nuclear_mass(aa_, zz_, deps_):
     return deps_ + aa_*AMU - zz_*MEL + electron_binding_energy(zz_)
 
+# Gibbs free energy per nucleon for a given nucleus (A,Z) and ne
 def gibbs_free_energy_per_nucleon(aa_, zz_, ne_, deps_):
-    vws = zz_/ne_
-    nb = aa_/vws
+    vws = zz_/ne_ # volume of the Wigner-Seitz cell
+    nb = aa_/vws # baryon density within the cell
     e = nuclear_mass(aa_, zz_, deps_)
     return e/aa_ + 4./3.*lattice_energy_density(zz_, ne_)*vws/aa_ \
             + zz_/aa_*electron_chemical_potential(ne_)
 
+# Composition of the outer crust for a given pressure pp and mass table
 def get_outer_crust_composition(pp_, mass_table):
     gmin = 1.e99
     f_data = open(mass_table, 'r')
@@ -64,7 +79,7 @@ def get_outer_crust_composition(pp_, mass_table):
         columns = line.strip().split()
         zz = float(columns[0])
         nn = float(columns[1])
-        deps = float(columns[2]) # mass excess
+        deps = float(columns[2])
         if (nn > zz and nn % 2 == 0 and zz % 2 == 0):
             ne = get_electron_density(zz, pp_)
             aa = zz + nn
@@ -76,6 +91,7 @@ def get_outer_crust_composition(pp_, mass_table):
     f_data.close()
     return aa/zz*ne, gmin, aa_eq, zz_eq
     
+# Main calculation: loop on the pressure pp
 def main():
     mass_table = sys.argv[1]
     outfile = sys.argv[2]
