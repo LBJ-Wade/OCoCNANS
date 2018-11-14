@@ -23,6 +23,8 @@ if you set execute permission with
 
 ### Available mass tables
 
+The format of the mass tables is Z, N, mass excess (`deps`).
+
 * AME1995 (with and without interpolated values)
 
 * AME2003 (with and without interpolated values)
