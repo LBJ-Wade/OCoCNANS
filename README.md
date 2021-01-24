@@ -23,7 +23,7 @@ Getting started
 The only two user-facing functions in the module are `ococnans.read_masstable` 
 and `ococnans.outer_crust`:
 
-``` { .py }
+``` py 
 import ococnans as oc
 hfb26 = oc.read_masstable("masstables/hfb26/data", sep=' ', 
     mexcess=True, useexpdata=True)
