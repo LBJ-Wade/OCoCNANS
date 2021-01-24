@@ -1,7 +1,3 @@
-*.data
+__pycache__/*
 
-*.out
-
-*.plt
-
-*.pdf
+test.py
