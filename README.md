@@ -31,9 +31,10 @@ ocrust = oc.outer_crust(hfb26, pressure_step=0.003)
 ```
 
 `ococnans.outer_crust` returns a NumPy array for the ground state of matter in 
-the outer crust. Columns are baryon number density in fm$^{-3}$, pressure in 
-MeV, neutron chemical potential in MeV, proton chemical potential in MeV, mass 
-number of equilibrium nucleus, and charge number number of equilibrium nucleus.
+the outer crust. Columns are baryon number density in inverse cubic femtometer, 
+pressure in MeV per cubic femtometer, neutron chemical potential in MeV, proton 
+chemical potential in MeV, mass number of equilibrium nucleus, and charge 
+number number of equilibrium nucleus.
 
 The NumPy array can eventually be converted to a pandas DataFrame and 
 Matplotlib can be used for visualization.
@@ -74,3 +75,30 @@ ax.set_yscale("log")
 ```
 
 ![OuterCrust_HFB-26](example.png "Ground state of matter in the outer crust for HFB-26")
+
+### Mass tables
+
+While the outer layers of the outer crust are solely determined from 
+experimental nuclear masses (`masstables/ame2016+welker2017.data`), it is 
+necessary to use a mass model to evaluate the composition of the densest 
+layers, which consists of very neutron-rich nuclei. Note that you must use 
+`useexpdata=True` when running `ococnans.outer_crust` to use experimental data 
+instead of the theoretical masses if available.
+
+Any mass model can be used as long as the columns of the corresponding table 
+are proton number, neutron number, and either mass excess or nuclear 
+mass in MeV (in which case you must use `mexcess=False` when running 
+`ococnans.outer_crust`).
+
+The following mass models are available in `masstables/`:
+
+* **ETFSI12** (`etfsi12.data`): Y. Aboussir et al., 
+    __At. Data Nucl. Data Tables__ **61** (1995) 127
+* **FRDM95** (`frdm95.data`): Moller, P. et al., 
+    __At. Data and Nuc. Data Tables__ **59** (1995) 185
+* **HFB-14** (`hfb14.data`): S. Goriely, M. Samyn, J.M. Pearson, 
+    __Phys. Rev. C__ **75** 064312 (2007)
+* **HFB-26** (`hfb26.data`): S. Goriely, N. Chamel, J.M. Pearson, 
+    __Phys. Rev. C__ **88** 024308 (2013)
+* **KTUY05** (`ktuy05.data`): H. Koura, T.Tachibana, M. Uno, M. Yamada, 
+    __Progr. Theor. Phys.__ **113** (2005) 305
