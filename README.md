@@ -93,12 +93,12 @@ mass in MeV (in which case you must use `mexcess=False` when running
 The following mass models are available in `masstables/`:
 
 * **ETFSI12** (`etfsi12.data`): Y. Aboussir et al., 
-    __At. Data Nucl. Data Tables__ **61** (1995) 127
+    _At. Data Nucl. Data Tables_ **61** (1995) 127
 * **FRDM95** (`frdm95.data`): Moller, P. et al., 
-    __At. Data and Nuc. Data Tables__ **59** (1995) 185
+    _At. Data and Nuc. Data Tables_ **59** (1995) 185
 * **HFB-14** (`hfb14.data`): S. Goriely, M. Samyn, J.M. Pearson, 
-    __Phys. Rev. C__ **75** 064312 (2007)
+    _Phys. Rev. C_ **75** 064312 (2007)
 * **HFB-26** (`hfb26.data`): S. Goriely, N. Chamel, J.M. Pearson, 
-    __Phys. Rev. C__ **88** 024308 (2013)
+    _Phys. Rev. C_ **88** 024308 (2013)
 * **KTUY05** (`ktuy05.data`): H. Koura, T.Tachibana, M. Uno, M. Yamada, 
-    __Progr. Theor. Phys.__ **113** (2005) 305
+    _Progr. Theor. Phys._ **113** (2005) 305
