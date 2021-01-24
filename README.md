@@ -1,52 +1,59 @@
-# OCoCNANS
+OCoCNANS
+========
 
-OCoCNANS, for Outer Crust of Cold Non-Accreting Neutron Stars, is a Python code for calculating the outer crust composition and energetics of a cold non-accreting neutron star for a given nuclear mass table.
+OCoCNANS, for Outer Crust of Cold Non-Accreting Neutron Stars, is a small 
+Python code for calculating the outer crust composition and energetics of a 
+cold non-accreting neutron star for a given nuclear mass table.
 
-## Requirements 
+Requirements
+------------
 
-* Python 2.7
+* Python 3
 
-* [SciPy](https://www.scipy.org/scipylib/index.html)
+* [NumPy](https://numpy.org/install/)
 
+* [SciPy](https://scipy.org/install.html)
 
-## Usage
+Getting started
+---------------
 
-    python2.7 ococnans.py mass_table.data ocrust.out
+    git clone https://github.com/thomascarreau/OCoCNANS
+    cd OCoCNANS
 
-or
+The only two user-facing functions in the module are `ococnans.read_masstable` 
+and `ococnans.outer_crust`:
 
-    ./ococnans.py mass_table.data ocrust.out
+```
+import ococnans as oc
+hfb26 = oc.read_masstable("masstables/hfb26/data", sep=' ', 
+    mexcess=True, useexpdata=True)
+ocrust = oc.outer_crust(hfb26, pressure_step=0.003)
+```
 
-if you set execute permission with
+> ### Available mass tables
 
-    chmod +x ococnans.py
+> The format of the mass tables is Z, N, mass excess (`deps`).
 
-### Available mass tables
+> * AME1995 (with and without interpolated values)
 
-The format of the mass tables is Z, N, mass excess (`deps`).
+> * AME2003 (with and without interpolated values)
 
-* AME1995 (with and without interpolated values)
+> * AME2012 (with and without interpolated values)
 
-* AME2003 (with and without interpolated values)
+> * BR2013
 
-* AME2012 (with and without interpolated values)
+> * ETFSI12
 
-* BR2013
+> * FRDM95
 
-* ETFSI12
+> * HFB14
 
-* FRDM95
+> * HFB26
 
-* HFB14
+> * KTUY05
 
-* HFB26
+> * SVM13
 
-* KTUY05
+> * TCSM12
 
-* SVM13
-
-* TCSM12
-
-* TCSM13
-
-See the name of the associated files in `mass_tables/`.
+> * TCSM13
