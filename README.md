@@ -1,9 +1,9 @@
 OCoCNANS
 ========
 
-OCoCNANS (Outer Crust of Cold NonAccreting Neutron Stars) is a Python module 
-that can be used to evaluate the ground state of matter in the outer crust of 
-cold isolated neutron stars for a given a nuclear mass table.
+OCoCNANS (Outer Crust of Cold NonAccreting Neutron Stars) is a simple Python 
+module for evaluating the ground state of matter in the outer crust of cold 
+isolated neutron stars given a nuclear mass table.
 
 Requirements
 ------------
@@ -79,11 +79,12 @@ ax.set_yscale("log")
 ### Mass tables
 
 While the outer layers of the outer crust are solely determined from 
-experimental nuclear masses (`masstables/ame2016+welker2017.data`), it is 
-necessary to use a mass model to evaluate the composition of the densest 
-layers, which consists of very neutron-rich nuclei. Note that you must use 
-`useexpdata=True` when running `ococnans.outer_crust` to use experimental data 
-instead of the theoretical masses if available.
+experimental nuclear masses, it is necessary to use a mass model to evaluate 
+the composition of the densest layers, which consists of very neutron-rich 
+nuclei. Note that you must use `useexpdata=True` when running 
+`ococnans outer_crust` to make use of experimental masses 
+(`masstables/ame2016+welker2017.data`), whenever available, instead of the 
+chosen theoretical mass table.
 
 Any mass model can be used as long as the columns of the corresponding table 
 are proton number, neutron number, and either mass excess or nuclear 
