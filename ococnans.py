@@ -20,7 +20,7 @@ class ElectronGas:
 
     Parameters
     ----------
-    electron_number_density : float or array-like of floats
+    electron_number_density : float or array_like
         Electron number density (unit is /fm^3).
 
     """
@@ -61,15 +61,15 @@ def lattice_energy_density(charge_number, electron_number_density):
 
     Parameters
     ----------
-    charge_number : int
+    charge_number : int or array_like
         Atomic number of the nucleus.
 
-    electron_number_density : float or array-like of floats
+    electron_number_density : float or array_like
         Electron number density (unit is /fm^3).
 
     Returns
     -------
-    eldens : float or array-like of floats
+    eldens : float or array_like
         Lattice energy density (unit is MeV/fm^3).
 
     """
@@ -84,15 +84,15 @@ def lattice_pressure(charge_number, electron_number_density):
 
     Parameters
     ----------
-    charge_number : int
+    charge_number : int or array_like
         Atomic number (Z) of the nucleus.
 
-    electron_number_density : float  or array-like of floats
+    electron_number_density : float or array_like
         Electron number density (unit is /fm^3).
 
     Returns
     -------
-    pl : float or array-like of floats
+    pl : float or array_like
         Lattice pressure (unit is MeV/fm^3).
 
     """
@@ -125,18 +125,18 @@ def nuclear_mass_from_mass_excess(mass_number, charge_number, mass_excess):
 
     Parameters
     ----------
-    mass number : int 
+    mass number : int or array_like
         Mass number (A) of the nucleus.
 
-    charge_number : int
+    charge_number : int or array_like
         Atomic number (Z) of the nucleus.
 
-    mass_excess : float or array-like of floats
+    mass_excess : float or array_like
         Mass excess of the nucleus (unit is MeV).
 
     Returns
     -------
-    nuclear_mass : float or array-like of floats
+    nuclear_mass : float or array_like
         Nuclear mass corresponding to the input nucleus (unit is MeV).
 
     """
@@ -152,21 +152,21 @@ def gibbs_free_energy_per_nucleon(mass_number, charge_number,
 
     Parameters
     ----------
-    mass number : int 
+    mass number : int or array_like
         Mass number (A) of the nucleus.
 
-    charge_number : int
+    charge_number : int or array_like
         Atomic number (Z) of the nucleus.
 
-    electron_number_density : float or array-like of floats
+    electron_number_density : float or array-like
         Electron number density (unit is /fm^3).
 
-    nuclear_mass : float or array-like of floats
+    nuclear_mass : float or array_like
         Nuclear mass (unit is MeV).
 
     Returns
     -------
-    gibbs_free_en_per_nuc : float or array-like of floats
+    gibbs_free_en_per_nuc : float or array_like
         Gibbs free energy per nucleon (unit is MeV).
 
     """
