@@ -45,7 +45,7 @@ class ElectronGas:
                 / (self.fermi_wave_number * self.fermi_wave_number)\
                 / (HBARC * HBARC)\
                 * (self.gammar * (1.0 + 6.0 * self.xr * self.xr)\
-                + self.xr *self.xr * (2.0 * self.xr * self.xr + 1.0)\
+                + self.xr * self.xr * (2.0 * self.xr * self.xr + 1.0)\
                 / self.gammar - 1.0 / self.gammar)
 
     def pressure(self):
